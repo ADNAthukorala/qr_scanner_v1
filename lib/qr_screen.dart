@@ -89,7 +89,6 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                   ),
                 ),
                 Center(
-                  heightFactor: 1.4,
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12.0),
                     child: Text(
