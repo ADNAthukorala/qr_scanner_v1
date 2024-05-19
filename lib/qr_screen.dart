@@ -114,9 +114,9 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                 primary: false,
                 children: [
                   /// Scan qr code button
-                  ElevatedButton.icon(
-                    onPressed: (qrCodeResult != null)
-                        ? () async {
+                  (qrCodeResult != null)
+                      ? ElevatedButton.icon(
+                          onPressed: () async {
                             if (qrCodeResult != null) {
                               await _launchURL(
                                   Uri.parse(qrCodeResult!.code.toString()));
@@ -126,11 +126,15 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                             } else {
                               print('No URL'); // ignore: avoid_print
                             }
-                          }
-                        : null,
-                    icon: const Icon(Icons.qr_code_scanner_rounded),
-                    label: const Text('Scan the QR Code'),
-                  ),
+                          },
+                          icon: const Icon(Icons.link_rounded),
+                          label: const Text('Open the Link'),
+                        )
+                      : ElevatedButton.icon(
+                          onPressed: () {},
+                          icon: const Icon(Icons.qr_code_scanner_rounded),
+                          label: const Text('Scan the QR Code'),
+                        ),
 
                   /// Flash on/off, Flip camera buttons
                   Padding(
