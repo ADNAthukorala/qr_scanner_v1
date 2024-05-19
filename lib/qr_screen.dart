@@ -113,7 +113,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
               child: ListView(
                 primary: false,
                 children: [
-                  /// Scan qr code button
+                  /// Open the link of qr code button
                   (qrCodeResult != null)
                       ? ElevatedButton.icon(
                           onPressed: () async {
@@ -130,10 +130,30 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                           icon: const Icon(Icons.link_rounded),
                           label: const Text('Open the Link'),
                         )
-                      : ElevatedButton.icon(
-                          onPressed: () {},
-                          icon: const Icon(Icons.qr_code_scanner_rounded),
-                          label: const Text('Scan the QR Code'),
+                      : const SizedBox(
+                          height: 60.0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              /// QR icon
+                              Icon(
+                                Icons.qr_code_scanner_rounded,
+                                color: kAppThemeColor,
+                              ),
+
+                              /// Adding space
+                              SizedBox(width: 8.0),
+
+                              /// Text
+                              Text(
+                                'Scan the QR Code',
+                                style: TextStyle(
+                                  color: kAppThemeColor,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
 
                   /// Flash on/off, Flip camera buttons
