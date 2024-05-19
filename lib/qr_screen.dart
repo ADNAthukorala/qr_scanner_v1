@@ -74,6 +74,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
           Expanded(
             flex: 3,
             child: Stack(
+              fit: StackFit.expand,
               children: [
                 QRView(
                   key: qrKey,
