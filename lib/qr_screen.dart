@@ -35,7 +35,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   bool isValidUrl(String url) {
     // Regular expression for URL validation
     final RegExp regExp = RegExp(
-      r'^https?:\/\/(?:www\.)?[a-zA-Z0-9-]+(?:\.[a-zA-Z]{2,})+(?:\/[^\s]*)?$',
+      r'^(https?|ftp)://[^\s/$.?#].\S*$',
       caseSensitive: false,
       multiLine: false,
     );
