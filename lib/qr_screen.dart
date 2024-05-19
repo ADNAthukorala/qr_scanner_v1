@@ -31,10 +31,25 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     );
   }
 
+  /// URL validation
+  bool isValidUrl(String url) {
+    // Regular expression for URL validation
+    final RegExp regExp = RegExp(
+      r'^https?:\/\/(?:www\.)?[a-zA-Z0-9-]+(?:\.[a-zA-Z]{2,})+(?:\/[^\s]*)?$',
+      caseSensitive: false,
+      multiLine: false,
+    );
+    return regExp.hasMatch(url);
+  }
+
   /// Launch url
   Future<void> _launchURL(Uri url) async {
-    if (!await launchUrl(url)) {
-      throw Exception('Could not launch $url');
+    if (isValidUrl(url.toString())) {
+      if (!await launchUrl(url)) {
+        throw Exception('Could not launch $url');
+      }
+    } else {
+      print('Not a valid URL'); // ignore: avoid_print
     }
   }
 
@@ -58,17 +73,34 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
           /// QR scanner
           Expanded(
             flex: 3,
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
-              formatsAllowed: const [
-                BarcodeFormat.qrcode,
+            child: Stack(
+              children: [
+                QRView(
+                  key: qrKey,
+                  onQRViewCreated: _onQRViewCreated,
+                  formatsAllowed: const [
+                    BarcodeFormat.qrcode,
+                  ],
+                  overlay: QrScannerOverlayShape(
+                    borderColor: kAppThemeColor,
+                    borderRadius: 16.0,
+                    borderWidth: 6.0,
+                  ),
+                ),
+                Center(
+                  heightFactor: 1.4,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: Text(
+                      (qrCodeResult != null)
+                          ? qrCodeResult!.code.toString()
+                          : 'Scan the QR Code',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: kAppThemeColor),
+                    ),
+                  ),
+                ),
               ],
-              overlay: QrScannerOverlayShape(
-                borderColor: kAppThemeColor,
-                borderRadius: 16.0,
-                borderWidth: 6.0,
-              ),
             ),
           ),
 
@@ -84,13 +116,15 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                   /// Scan qr code button
                   ElevatedButton.icon(
                     onPressed: () async {
-                      (qrCodeResult != null)
-                          ? await _launchURL(
-                              Uri.parse(qrCodeResult!.code.toString()))
-                          : print('No URL'); // ignore: avoid_print
-                      setState(() {
-                        qrCodeResult = null;
-                      });
+                      if (qrCodeResult != null) {
+                        await _launchURL(
+                            Uri.parse(qrCodeResult!.code.toString()));
+                        setState(() {
+                          qrCodeResult = null;
+                        });
+                      } else {
+                        print('No URL'); // ignore: avoid_print
+                      }
                     },
                     icon: const Icon(Icons.qr_code_scanner_rounded),
                     label: const Text('Scan the QR Code'),
