@@ -94,7 +94,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                     child: Text(
                       (qrCodeResult != null)
                           ? qrCodeResult!.code.toString()
-                          : 'Scan the QR Code',
+                          : '',
                       textAlign: TextAlign.center,
                       style: const TextStyle(color: kAppThemeColor),
                     ),
@@ -115,17 +115,19 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                 children: [
                   /// Scan qr code button
                   ElevatedButton.icon(
-                    onPressed: () async {
-                      if (qrCodeResult != null) {
-                        await _launchURL(
-                            Uri.parse(qrCodeResult!.code.toString()));
-                        setState(() {
-                          qrCodeResult = null;
-                        });
-                      } else {
-                        print('No URL'); // ignore: avoid_print
-                      }
-                    },
+                    onPressed: (qrCodeResult != null)
+                        ? () async {
+                            if (qrCodeResult != null) {
+                              await _launchURL(
+                                  Uri.parse(qrCodeResult!.code.toString()));
+                              setState(() {
+                                qrCodeResult = null;
+                              });
+                            } else {
+                              print('No URL'); // ignore: avoid_print
+                            }
+                          }
+                        : null,
                     icon: const Icon(Icons.qr_code_scanner_rounded),
                     label: const Text('Scan the QR Code'),
                   ),
